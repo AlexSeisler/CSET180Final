@@ -7,9 +7,6 @@ from flask import flash, redirect, url_for
 from dotenv import load_dotenv
 
 load_dotenv()  # Loads from .env
-
-SMTP_SERVER = os.getenv('SMTP_SERVER')
-
 app = Flask(__name__)
 
 
@@ -19,7 +16,9 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Fixed connection string with DB specified
+#To access your own local database though your dev/feature branch, you need to set up a .env file with the following variables:
+# ADMIN_USERNAME=your_username
+# ADMIN_PASSWORD=your_password
 conn_str = f"mysql+pymysql://root:{ADMIN_PASSWORD}@localhost/ecommerce"
 engine = create_engine(conn_str, echo=True)
 
