@@ -30,7 +30,7 @@ A full-stack e-commerce platform where multiple vendors can list products and ma
 
 | Developer     | Branch Name              | Task Focus                         |
 |---------------|--------------------------|-------------------------------------|
-| You           | `feature/backend-core`   | Routes, DB logic, product mgmt     |
+| Alex           | `feature/backend-core`   | Routes, DB logic, product mgmt     |
 | Teammate A    | `feature/frontend-ui`    | Templates, UI/UX design            |
 | Teammate B    | `feature/auth-system`    | Login, registration, session logic |
 
@@ -41,7 +41,7 @@ A full-stack e-commerce platform where multiple vendors can list products and ma
 ### 💻 Setup (one-time)
 
 ```bash
-# Clone the repo
+# Clone the repo (only starting out)
 git clone https://github.com/<your-username>/multi-vendor-store.git
 cd multi-vendor-store
 
