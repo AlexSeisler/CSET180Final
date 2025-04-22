@@ -42,8 +42,8 @@ A full-stack e-commerce platform where multiple vendors can list products and ma
 
 ```bash
 # Clone the repo (only starting out)
-git clone https://github.com/<your-username>/multi-vendor-store.git
-cd multi-vendor-store
+git clone https://github.com/<your-username>/CSET180Final.git
+cd CSET180Final
 
 # Install packages (optional for team)
 pip install -r requirements.txt
