@@ -62,6 +62,8 @@ git checkout -b dev
 git push -u origin dev
 
 
+--- Daily work flow ---
+
 # 1. Sync latest changes
 git checkout dev
 git pull origin dev
