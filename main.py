@@ -1,33 +1,43 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-from sqlalchemy import create_engine, text
-from dotenv import load_dotenv
 import os
-from sqlalchemy.exc import IntegrityError
-from flask import flash, redirect, url_for
+from flask import Flask, render_template
+from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
-load_dotenv()  # Loads from .env
-app = Flask(__name__)
+# Import Blueprints
+from app.admin import admin
+from app.vendor import vendor
+from app.customer import customer
+from app.auth import auth
 
+# Load environment variables
+load_dotenv()
 
-ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
-# DB connection
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+def create_app():
+    app = Flask(__name__)
+    app.secret_key = 'your_secret_key'  # Replace with a secure key for production
 
-#To access your own local database though your dev/feature branch, you need to set up a .env file with the following variables:
-# ADMIN_USERNAME=your_username
-# ADMIN_PASSWORD=your_password
-conn_str = f"mysql+pymysql://root:{ADMIN_PASSWORD}@localhost/ecommerce"
-engine = create_engine(conn_str, echo=True)
+    # Setup MySQL connection
+    ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
+    conn_str = f"mysql+pymysql://root:{ADMIN_PASSWORD}@localhost/ecommerce"
+    engine = create_engine(conn_str, echo=True)
+    app.config['ENGINE'] = engine
 
-conn = engine.connect()
+    # Register Blueprints
+    app.register_blueprint(admin, url_prefix='/admin')
+    app.register_blueprint(vendor, url_prefix='/vendor')
+    app.register_blueprint(customer, url_prefix='/customer')
+    app.register_blueprint(auth, url_prefix='/auth')
 
-@app.route('/')
-def home():
-    return render_template('base.html')
+    # Default route
+    @app.route('/')
+    def index():
+        return render_template('index.html')
+
+    return app
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app = create_app()
+    app.run(debug=True)
+
+
 
