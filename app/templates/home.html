@@ -127,44 +127,43 @@
   </style>
 </head>
 <body>
-
   <header>
     <div class="nav-left">
       {% if session.get('user_id') %}
-        <a href="/account">Account</a>
-        <a href="/cart">Cart 🛒</a>
-        <a href="/logout">Sign Out</a>
+        <a href="{{ url_for('account.account_page') }}">Account</a>
+        <a href="{{ url_for('cart.view_cart') }}">Cart 🛒</a>
+        <a href="{{ url_for('auth.logout') }}">Sign Out</a>
       {% else %}
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
+        <a href="{{ url_for('auth.login') }}">Login</a>
+        <a href="{{ url_for('auth.register') }}">Register</a>
       {% endif %}
     </div>
-
+  
     <div class="nav-center"></div>
-
+  
     <div class="search-bar">
       <form action="/search" method="GET">
         <input type="text" name="query" placeholder="Search...">
         <button type="submit">Go</button>
       </form>
     </div>
-
+  
     <div class="logo">
       <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png" alt="Logo">
     </div>
   </header>
-
+  
   <div class="container">
     <p>Welcome to</p>
     <h1>Sahara</h1>
-
+  
     <div class="featured-products">
       <div class="product-card">Featured Product</div>
       <div class="product-card">Featured Product</div>
       <div class="product-card">Featured Product</div>
       <div class="product-card">Featured Product</div>
     </div>
-
+  
     <div class="category-section">
       <div class="category-header">Product categories</div>
       <div class="category-item"><a href="/category/food">Food</a></div>
@@ -173,8 +172,9 @@
       <div class="category-item"><a href="/category/clothing">Clothing</a></div>
     </div>
   </div>
-
+  
 </body>
 </html>
+
 
 
