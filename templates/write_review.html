@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Write a Review</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4e3be;
+      margin: 0;
+      padding: 40px;
+    }
+
+    .review-form {
+      background: white;
+      border: 2px solid black;
+      padding: 30px;
+      max-width: 500px;
+      margin: auto;
+      border-radius: 10px;
+    }
+
+    .review-form h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .review-form form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .review-form select,
+    .review-form textarea,
+    .review-form button {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .review-form button {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="review-form">
+  <h2>Write a Review for {{ product.name }}</h2>
+
+  <form method="POST">
+    <label for="rating">Rating:</label>
+    <select name="rating" id="rating" required>
+      <option value="5">5 Stars ⭐⭐⭐⭐⭐</option>
+      <option value="4">4 Stars ⭐⭐⭐⭐</option>
+      <option value="3">3 Stars ⭐⭐⭐</option>
+      <option value="2">2 Stars ⭐⭐</option>
+      <option value="1">1 Star ⭐</option>
+    </select>
+
+    <label for="comment">Comment:</label>
+    <textarea name="comment" id="comment" rows="4" required></textarea>
+
+    <button type="submit">Submit Review</button>
+  </form>
+
+</div>
+
+</body>
+</html>

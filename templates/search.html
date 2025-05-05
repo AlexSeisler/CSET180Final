@@ -220,28 +220,31 @@
       </div>
 
       <div class="product-list">
-        <div class="sort-dropdown">
-          <label>Sort by: </label>
-          <select name="sort" onchange="this.form.submit()">
-            <option value="">--</option>
-            <option value="price_asc" {% if request.args.get('sort') == 'price_asc' %}selected{% endif %}>Price (Low → High)</option>
-            <option value="price_desc" {% if request.args.get('sort') == 'price_desc' %}selected{% endif %}>Price (High → Low)</option>
-            <option value="name_asc" {% if request.args.get('sort') == 'name_asc' %}selected{% endif %}>Name A → Z</option>
-          </select>
-        </div>
+  <div class="sort-dropdown">
+    <label>Sort by: </label>
+    <select name="sort" onchange="this.form.submit()">
+      <option value="">--</option>
+      <option value="price_asc" {% if request.args.get('sort') == 'price_asc' %}selected{% endif %}>Price (Low → High)</option>
+      <option value="price_desc" {% if request.args.get('sort') == 'price_desc' %}selected{% endif %}>Price (High → Low)</option>
+      <option value="name_asc" {% if request.args.get('sort') == 'name_asc' %}selected{% endif %}>Name A → Z</option>
+    </select>
+  </div>
 
-        {% for product in products %}
-        <div class="product-item">
-          <img src="{{ product.image_url or 'https://via.placeholder.com/100x100.png?text=PC' }}" alt="product">
-          <div class="product-info">
-            <h4>Price: ${{ product.price }}</h4>
-            <p>{{ product.description }}</p>
-          </div>
-        </div>
-        {% else %}
-        <p>No products found.</p>
-        {% endfor %}
+  {% for product in products %}
+  <a href="/product/{{ product.id }}" style="text-decoration: none; color: inherit;">
+    <div class="product-item">
+      <img src="{{ product.image_url or 'https://via.placeholder.com/100x100.png?text=PC' }}" alt="product">
+      <div class="product-info">
+        <h4>Price: ${{ product.price }}</h4>
+        <p>{{ product.description }}</p>
       </div>
+    </div>
+  </a>
+  {% else %}
+  <p>No products found.</p>
+  {% endfor %}
+</div>
+
     </form>
   </div>
 
