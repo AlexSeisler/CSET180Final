@@ -1,6 +1,5 @@
 import os
 import random
-import mysql.connector
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from sqlalchemy import create_engine, or_
 from dotenv import load_dotenv
