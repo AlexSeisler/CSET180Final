@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4e3be;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #f4e3be;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .nav-left {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-left a {
+      color: white;
+      text-decoration: none;
+      font-weight: normal;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-bar input,
+    .search-bar select {
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #aaa;
+    }
+
+    .search-bar input {
+      width: 250px;
+    }
+
+    .search-bar button {
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .container {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .filters {
+      width: 250px;
+      background-color: white;
+      border: 2px solid black;
+      padding: 20px;
+    }
+
+    .filters h3 {
+      margin-top: 0;
+    }
+
+    .filters label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .filters input,
+    .filters select {
+      width: 100%;
+      padding: 6px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .sidebar-logo {
+      background-color: white;
+      border: 2px solid black;
+      padding: 20px;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .product-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .product-item {
+      background-color: white;
+      display: flex;
+      gap: 20px;
+      padding: 15px;
+      border: 2px solid black;
+      border-radius: 10px;
+      align-items: center;
+    }
+
+    .product-item img {
+      height: 100px;
+      width: auto;
+      border: 1px solid #ccc;
+    }
+
+    .product-info {
+      flex: 1;
+    }
+
+    .product-info h4 {
+      margin: 0 0 5px;
+    }
+
+    .sort-dropdown {
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .sort-dropdown select {
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-left">
+      {% if session.get('user_id') %}
+        <a href="/account">Account</a>
+        <a href="/cart">Cart 🛒</a>
+        <a href="/logout">Sign Out</a>
+      {% else %}
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      {% endif %}
+    </div>
+
+    <div class="search-bar">
+      <form method="GET" action="/search" style="display: flex; gap: 10px;">
+        <select name="department">
+          <option {% if department == 'All' %}selected{% endif %}>All</option>
+          <option {% if department == 'Computers' %}selected{% endif %}>Computers</option>
+          <option {% if department == 'Clothing' %}selected{% endif %}>Clothing</option>
+          <option {% if department == 'Books' %}selected{% endif %}>Books</option>
+        </select>
+        <input type="text" name="q" placeholder="Search products..." value="{{ search or '' }}">
+        <button type="submit">Go</button>
+      </form>
+    </div>
+  </header>
+
+  <div class="container">
+    <form method="GET" action="/search" style="display: flex; gap: 20px; width: 100%;">
+      <div>
+        <div class="filters">
+          <h3>Search Products</h3>
+          <label>Name</label>
+          <input type="text" name="name" value="{{ request.args.get('name', '') }}">
+
+          <label>Description</label>
+          <input type="text" name="description" value="{{ request.args.get('description', '') }}">
+
+          <label>Vendor</label>
+          <input type="text" name="vendor" value="{{ request.args.get('vendor', '') }}">
+
+          <label>Size</label>
+          <select name="size">
+            <option value="">Any</option>
+            <option value="Small" {% if request.args.get('size') == 'Small' %}selected{% endif %}>Small</option>
+            <option value="Medium" {% if request.args.get('size') == 'Medium' %}selected{% endif %}>Medium</option>
+            <option value="Large" {% if request.args.get('size') == 'Large' %}selected{% endif %}>Large</option>
+          </select>
+
+          <label>Color</label>
+          <input type="text" name="color" value="{{ request.args.get('color', '') }}">
+
+          <label>Availability</label>
+          <select name="availability">
+            <option value="">Any</option>
+            <option value="In Stock" {% if request.args.get('availability') == 'In Stock' %}selected{% endif %}>In Stock</option>
+            <option value="Out of Stock" {% if request.args.get('availability') == 'Out of Stock' %}selected{% endif %}>Out of Stock</option>
+          </select>
+
+          <button type="submit">Apply Filters</button>
+        </div>
+
+        <div class="sidebar-logo">
+          <a href="/" style="text-decoration: none; color: black; text-align: center; display: block;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png" alt="Sahara Logo" style="width: 100px; height: auto;">
+            <p style="margin-top: 10px; font-weight: bold;">Sahara</p>
+          </a>
+        </div>
+      </div>
+
+      <div class="product-list">
+  <div class="sort-dropdown">
+    <label>Sort by: </label>
+    <select name="sort" onchange="this.form.submit()">
+      <option value="">--</option>
+      <option value="price_asc" {% if request.args.get('sort') == 'price_asc' %}selected{% endif %}>Price (Low → High)</option>
+      <option value="price_desc" {% if request.args.get('sort') == 'price_desc' %}selected{% endif %}>Price (High → Low)</option>
+      <option value="name_asc" {% if request.args.get('sort') == 'name_asc' %}selected{% endif %}>Name A → Z</option>
+    </select>
+  </div>
+
+  {% for product in products %}
+  <a href="/product/{{ product.id }}" style="text-decoration: none; color: inherit;">
+    <div class="product-item">
+      <img src="{{ product.image_url or 'https://via.placeholder.com/100x100.png?text=PC' }}" alt="product">
+      <div class="product-info">
+        <h4>Price: ${{ product.price }}</h4>
+        <p>{{ product.description }}</p>
+      </div>
+    </div>
+  </a>
+  {% else %}
+  <p>No products found.</p>
+  {% endfor %}
+</div>
+
+    </form>
+  </div>
+
+</body>
+</html>
+
+
+
