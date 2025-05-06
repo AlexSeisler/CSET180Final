@@ -1,0 +1,120 @@
+CREATE DATABASE IF NOT EXISTS ecommerce;
+USE ecommerce;
+CREATE TABLE Admin (
+	AdminID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(50) UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Customer (
+	CustomerID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(50) UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    address TEXT
+);
+
+CREATE TABLE Vendor (
+	VendorID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(50) UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    storeName VARCHAR(50),
+    status ENUM('A', 'R', 'P') DEFAULT 'P'
+);
+
+CREATE TABLE Discount (
+    DiscountID INT PRIMARY KEY AUTO_INCREMENT,
+    Percentage DECIMAL(5,2),
+    StartDate DATE,
+    EndDate DATE
+    
+);
+CREATE TABLE DiscountProduct (
+    DiscountID INT,
+    ProductID INT,
+    PRIMARY KEY (DiscountID, ProductID),
+    FOREIGN KEY (DiscountID) REFERENCES Discount(DiscountID),
+    FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+);
+
+CREATE TABLE Product (
+    ProductID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100),
+    Description TEXT,
+    Price DECIMAL(10,2),
+    StockQuantity INT,
+    Category VARCHAR(100),
+    DiscountID INT,
+    VendorID INT,
+    FOREIGN KEY (DiscountID) REFERENCES Discount(DiscountID),
+    FOREIGN KEY (VendorID) REFERENCES Vendor(VendorID)
+);
+
+CREATE TABLE Complaint (
+    ComplaintID INT PRIMARY KEY AUTO_INCREMENT,
+    Description TEXT,
+    Status ENUM('R', 'P') DEFAULT 'P',
+    CustomerID INT,
+    VendorID INT,
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
+    FOREIGN KEY (VendorID) REFERENCES Vendor(VendorID)
+);
+
+CREATE TABLE Message (
+    MessageID INT PRIMARY KEY AUTO_INCREMENT,
+    SenderID INT,
+    ReceiverID INT,
+    Timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Content TEXT,
+    FOREIGN KEY (SenderID) REFERENCES Customer(CustomerID),
+    FOREIGN KEY (ReceiverID) REFERENCES Vendor(VendorID)
+);
+
+CREATE TABLE Review (
+    ReviewID INT PRIMARY KEY AUTO_INCREMENT,
+    Rating INT CHECK (Rating BETWEEN 1 AND 5),
+    Comment TEXT,
+    Date DATE,
+    CustomerID INT,
+    ProductID INT,
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
+    FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+);
+
+CREATE TABLE OrderTable (
+    OrderID INT PRIMARY KEY AUTO_INCREMENT,
+    OrderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    TotalAmount DECIMAL(10,2),
+    Status ENUM('P', 'S', 'D') DEFAULT 'P',  -- Pending, Shipped, Delivered
+    CustomerID INT,
+    VendorID INT,
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
+    FOREIGN KEY (VendorID) REFERENCES Vendor(VendorID)
+);
+
+CREATE TABLE OrderItem (
+    OrderID INT,
+    ProductID INT,
+    Quantity INT,
+    PriceAtPurchase DECIMAL(10,2),
+    PRIMARY KEY (OrderID, ProductID),
+    FOREIGN KEY (OrderID) REFERENCES OrderTable(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+);
+
+CREATE TABLE Cart (
+    CartID INT PRIMARY KEY AUTO_INCREMENT,
+    CustomerID INT,
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
+);
+
+CREATE TABLE CartItem (
+    CartID INT,
+    ProductID INT,
+    Quantity INT,
+    PRIMARY KEY (CartID, ProductID),
+    FOREIGN KEY (CartID) REFERENCES Cart(CartID),
+    FOREIGN KEY (ProductID) REFERENCES Product(ProductID)
+);
